@@ -1,6 +1,7 @@
 currentBuild.displayName = "Final_Demo # "+currentBuild.number
 
-    def getDockerTag() {
+
+def getDockerTag() {
     def tag = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
     return tag
 }
@@ -35,6 +36,7 @@ pipeline {
         }
 
         stage('Build') {
+            agent any
             steps {
                 script {
                     sh 'cp -r ../devops-training@2/target .'
@@ -48,6 +50,7 @@ pipeline {
         }
 
         stage('Ansible Playbook') {
+            agent any
             steps {
                 script {
                     def final_tag = Docker_tag.replaceAll("\\s", "")
@@ -59,8 +62,3 @@ pipeline {
         }
     }
 }
-      
-	       
-	      
-    
-
