@@ -1,15 +1,7 @@
-currentBuild.displayName = "Final_Demo # "+currentBuild.number
-
-
-def getDockerTag() {
-    def tag = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-    return tag
-}
+def Docker_tag = getDockerTag()
 
 pipeline {
     agent any
-    
-    }
 
     stages {
         stage('Quality Gate Static Check') {
@@ -34,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build and Push Docker Image') {
             agent any
             steps {
                 script {
@@ -60,4 +52,5 @@ pipeline {
             }
         }
     }
+}
 
