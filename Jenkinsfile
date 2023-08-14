@@ -5,12 +5,6 @@ pipeline {
 
     stages {
         stage('Quality Gate Static Check') {
-            agent {
-                docker {
-                    image 'maven'
-                    args '-v $HOME/.m2:/root/.m2'
-                }
-            }
             steps {
                 script {
                     withSonarQubeEnv('sonarserver') {
@@ -27,7 +21,6 @@ pipeline {
         }
 
         stage('Build and Push Docker Image') {
-            agent any
             steps {
                 script {
                     sh 'cp -r ../devops-training@2/target .'
@@ -41,7 +34,6 @@ pipeline {
         }
 
         stage('Ansible Playbook') {
-            agent any
             steps {
                 script {
                     def final_tag = Docker_tag.replaceAll("\\s", "")
@@ -53,4 +45,3 @@ pipeline {
         }
     }
 }
-
