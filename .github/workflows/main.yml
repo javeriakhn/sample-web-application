@@ -3,21 +3,22 @@ name: sample-web-application
 on:
   push:
     branches:
-    - ansible-sonar
+      - ansible-sonar
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2  # Use the latest version of the checkout action
 
-    - name: Deploy  to Docker
-      env:
+      - name: Build and Push Docker Image
+        env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      run: |
-        # Build and deploy the Docker container
-        docker build -t my-sample-app .
-        docker tag my-sample-app:latest javeriakashan/my-sample-app:latest
-        docker push javeriakashan/my-sample-app:latest
+        run: |
+          echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker build -t my-sample-app .
+          docker tag my-sample-app:latest your-dockerhub-username/my-sample-app:latest
+          docker push your-dockerhub-username/my-sample-app:latest
+
