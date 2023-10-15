@@ -1,6 +1,6 @@
 - hosts: test
   tasks:
-  - name: copy deployment file to kubernetes master 
+  - name: copy deployment file to kubernetes 
     copy:
       src: deployment.yaml
       dest: /root/
