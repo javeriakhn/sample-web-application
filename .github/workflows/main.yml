@@ -3,7 +3,7 @@ name: sample-web-application
 on:
   push:
     branches:
-    - main
+    - ansible-sonar
 
 jobs:
   build-and-deploy:
