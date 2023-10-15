@@ -1,0 +1,45 @@
+name: sample-web-application
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # Choose the Node.js version you need
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run JavaScript Linters and Tests
+      run: |
+        # Run SonarQube for JavaScript linting
+        npm run lint
+
+        # Run tests and generate JUnit report
+        npm test -- --reporter junit
+
+    - name: Upload JUnit Test Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: junit-report
+        path: test-results.xml
+
+    - name: Deploy  to Docker
+      env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      run: |
+        # Build and deploy the Docker container
+        docker build -t my-sample-app .
+        docker tag my-sample-app:latest javeriakashan/my-sample-app:latest
+        docker push javeriakashan/my-sample-app:latest
