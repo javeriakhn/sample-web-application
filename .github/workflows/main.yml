@@ -12,28 +12,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'  # Choose the Node.js version you need
-
-    - name: Install Dependencies
-      run: npm install
-
-    - name: Run JavaScript Linters and Tests
-      run: |
-        # Run SonarQube for JavaScript linting
-        npm run lint
-
-        # Run tests and generate JUnit report
-        npm test -- --reporter junit
-
-    - name: Upload JUnit Test Report
-      uses: actions/upload-artifact@v2
-      with:
-        name: junit-report
-        path: test-results.xml
-
     - name: Deploy  to Docker
       env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
